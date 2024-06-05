@@ -32,16 +32,17 @@ export function AddUsageForm({day, timeActive}) {
   }
 
   return (
-    <div className="text-xl">
+    <div class="container mx-auto my-4 px-4 text-xl">
+    
       <p>{status}</p>
-      <p> usage form: </p>
+      
       {/* day:
       <input type="text" value={day} onChange={(ev) => setDay(ev.target.value)} /> */}
-      Name:
+      Nazwa:
       <input type="text" value={name} onChange={(ev) => setName(ev.target.value)} />
-      Power:
+      kWh:
       <input type="number" value={power} onChange={(ev) => setPower(Number(ev.target.value))} />
-      <button onClick={AddUsage}>Add</button>
+      <button onClick={AddUsage}>dodaj</button>
       
     </div>
   )

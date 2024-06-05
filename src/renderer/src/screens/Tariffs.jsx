@@ -106,10 +106,10 @@ export default function Tariffs() {
   }
 
   return (
-    <div>
+    <div class="container mx-auto my-4 px-4">
       <div className="sm:col-span-3">
         <label htmlFor="tariffName" className="block text-sm font-medium leading-6 text-gray-900">
-          Tariff Name
+         Nazwa nowoutworzonej taryfy
         </label>
         <div className="mt-2">
           <input
@@ -129,7 +129,7 @@ export default function Tariffs() {
           htmlFor="existingTariffs"
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          Select Existing Tariff
+          Wybierz istniejącą taryfę
         </label>
         <div className="mt-2">
           <select
@@ -138,7 +138,7 @@ export default function Tariffs() {
             onChange={(e) => handleTariffSelection(e.target.value)}
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
           >
-            <option value="">Select a tariff</option>
+            <option value="">---</option>
             {existingTariffs.map((tariffName, index) => (
               <option key={index} value={tariffName}>
                 {tariffName}
@@ -170,7 +170,7 @@ export default function Tariffs() {
               <div key={tariffIndex} className="mb-4 flex space-x-4">
                 <input
                   type="text"
-                  placeholder="From Hour"
+                  placeholder="Od godziny"
                   value={tariff.fromHour}
                   onChange={(e) => {
                     const inputValue = e.target.value
@@ -189,7 +189,7 @@ export default function Tariffs() {
                 />
                 <input
                   type="text"
-                  placeholder="To Hour"
+                  placeholder="Do godziny"
                   value={tariff.toHour}
                   onChange={(e) => {
                     const inputValue = e.target.value
@@ -209,7 +209,7 @@ export default function Tariffs() {
 
                 <input
                   type="number"
-                  placeholder="Price"
+                  placeholder="koszt kWH "
                   value={tariff.price}
                   onChange={(e) =>
                     handleTariffChange(dayIndex, tariffIndex, 'price', e.target.value)
@@ -222,7 +222,7 @@ export default function Tariffs() {
               onClick={() => addTariffSlot(dayIndex)}
               className="mb-4 mt-2 rounded bg-green-500 px-4 py-2 font-semibold text-white"
             >
-              Add Time Slot
+              Dodaj kolejny zakres czasowy
             </button>
           </div>
         ))}

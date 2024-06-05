@@ -64,11 +64,11 @@ function Calculator() {
     : []
 
   return (
-    <div>
+    <div class="container mx-auto my-4 px-4">
       <div>
-        <label htmlFor="tariffSelect">Select Tariff:</label>
+        <label htmlFor="tariffSelect">Wybierz taryfę:</label>
         <select id="tariffSelect">
-          <option value="">Select a tariff</option>
+          <option value="">---</option>
           {uniqueTariffNames.map((tariffName) => (
             <option key={tariffName} value={tariffName}>
               {tariffName}
@@ -76,7 +76,7 @@ function Calculator() {
           ))}
         </select>
       </div>
-      <h2>Total Costs:</h2>
+      <h2>Opłata dla zapisanych taryf:</h2>
       <ul>
         {Object.entries(totalCosts).map(([tariffName, cost]) => (
           <li key={tariffName}>
@@ -84,7 +84,7 @@ function Calculator() {
           </li>
         ))}
       </ul>
-      <h2>Lowest Cost Tariff: {lowestCostTariff}</h2>
+      <h2>Najkorzystniejsza taryfa: {lowestCostTariff}</h2>
     </div>
   )
 }

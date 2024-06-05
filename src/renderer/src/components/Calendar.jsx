@@ -94,7 +94,7 @@ function Calendar() {
   }
 
   return (
-    <div>
+    <div class="container mx-auto my-4 px-4">
       <div className="sm:col-span-3">
         <label
           htmlFor="applianceName"
