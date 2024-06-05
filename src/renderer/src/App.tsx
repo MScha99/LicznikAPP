@@ -6,8 +6,13 @@ import UsageList from './components/UsageList.jsx'
 import UsageGet from './components/UsageGet.jsx'
 import Calendar from './components/Calendar.jsx'
 
+
+
 function App(): JSX.Element {
-  //const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  
+
+
+
 
   async function persist() {
     return (await navigator.storage) && navigator.storage.persist && navigator.storage.persist()
@@ -31,31 +36,26 @@ function App(): JSX.Element {
     }
 
     if (navigator.storage && navigator.storage.estimate) {
-      const estimation = await navigator.storage.estimate();
-      console.log(`Quota: ${estimation.quota}`);
-      console.log(`Usage: ${estimation.usage}`);
+      const estimation = await navigator.storage.estimate()
+      console.log(`Quota: ${estimation.quota}`)
+      console.log(`Usage: ${estimation.usage}`)
     } else {
-      console.error("StorageManager not found");
+      console.error('StorageManager not found')
     }
   })
-
-  
-
-
-
 
   return (
     <>
       {/* <button onClick={db.delete()}> delete db</button> */}
       {/* <AddFriendsForm />
       <FriendList minAge={'15:00'} maxAge={'16:00'} /> */}
-   
-      <AddUsageForm day={'Poniedziałek'} timeActive={{}}/>
+
+
+      <AddUsageForm day={'Poniedziałek'} timeActive={{}} />
       {/* <UsageList/> */}
-      <br/>
-      {/* <UsageGet name={"Kuchenka"}/> */}
-      <Calendar/>
- 
+      <br />
+      <UsageGet name={'Telewizor'} />
+      {/* <Calendar/> */}
     </>
   )
 }

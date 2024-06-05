@@ -10,16 +10,12 @@ function Calendar() {
   )
   const [name, setName] = useState('')
   const [power, setPower] = useState('')
-  const [devices, setDevices] = useState('')
+  const [devices, setDevices] = useState([])
 
   // Fetch usage data from the database using useLiveQuery
   const usage = useLiveQuery(async () => {
     const usageData = await db.usage.where('name').equalsIgnoreCase(name).toArray()
-    // console.log("test keys ",await db.usage.orderBy('name').keys())
     setDevices(Array.from(new Set(await db.usage.orderBy('name').keys())))
-    console.log("devices ",devices)
-
-
     return usageData
   }, [name])
 
@@ -54,6 +50,10 @@ function Calendar() {
     setWeekState(updatedWeekState)
   }
 
+  const formatHour = (hour) => {
+    return hour.toString().padStart(2, '0') + ':00'
+  }
+
   const handleUpdateDatabase = async () => {
     const updatedUsageData = []
     weekState.forEach((dayState, dayIndex) => {
@@ -69,7 +69,9 @@ function Calendar() {
       const timeActive = {}
       dayState.forEach((isActive, hourIndex) => {
         if (isActive) {
-          const hourRange = `${hourIndex}:00-${hourIndex + 1}:00`
+          const fromHour = String(hourIndex).padStart(2, '0')
+          const toHour = String(hourIndex + 1).padStart(2, '0')
+          const hourRange = `${fromHour}-${toHour}`
           timeActive[hourRange] = true
         }
       })
@@ -78,15 +80,27 @@ function Calendar() {
 
     // Update or add data in the database
     await db.usage.where('name').equalsIgnoreCase(name).delete()
-    await db.usage.bulkAdd(updatedUsageData)
-    console.log('Database updated successfully:', updatedUsageData)
+    // Convert timeActive to store only hours without minutes
+    const updatedUsageDataWithoutMinutes = updatedUsageData.map((data) => ({
+      ...data,
+      timeActive: Object.entries(data.timeActive).reduce((acc, [hourRange, isActive]) => {
+        const [fromHour] = hourRange.split('-')
+        acc[fromHour] = isActive
+        return acc
+      }, {})
+    }))
+    await db.usage.bulkAdd(updatedUsageDataWithoutMinutes)
+    console.log('Database updated successfully:', updatedUsageDataWithoutMinutes)
   }
 
   return (
     <div>
-     <div className="sm:col-span-3">
-        <label htmlFor="applianceName" className="block text-sm font-medium leading-6 text-gray-900">
-          urządzenie
+      <div className="sm:col-span-3">
+        <label
+          htmlFor="applianceName"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Urządzenie
         </label>
         <div className="mt-2">
           <select
@@ -99,7 +113,9 @@ function Calendar() {
           >
             <option value="">Wybierz urządzenie</option>
             {devices.map((device, index) => (
-              <option key={index} value={device}>{device}</option>
+              <option key={index} value={device}>
+                {device}
+              </option>
             ))}
           </select>
         </div>
@@ -110,7 +126,7 @@ function Calendar() {
           onClick={handleUpdateDatabase}
           className="mt-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white"
         >
-          save to db
+          Save to DB
         </button>
 
         <div className="grid grid-cols-7 gap-4">
@@ -129,7 +145,7 @@ function Calendar() {
                   onClick={() => handleHourClick(dayIndex, hourIndex)}
                   className={`w-full py-2 ${isActive ? 'bg-green-500' : 'bg-red-500'} mb-2 font-semibold text-white`}
                 >
-                  {hourIndex}:00 - {hourIndex + 1}:00
+                  {`${String(hourIndex).padStart(2, '0')}:00 - ${String(hourIndex + 1).padStart(2, '0')}:00`}
                 </button>
               ))}
             </div>
