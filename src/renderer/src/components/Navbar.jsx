@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   return (
-    <div className="mx-auto flex h-24 max-w-[1240px] items-center justify-start bg-black px-4 text-white">
+    <div className="mx-auto flex h-24  items-center justify-start bg-black px-4 text-white">
       {/* Logo */}
       <h1 className="mx-12 text-3xl font-bold text-[#00df9a]">LICZNIK</h1>
 
