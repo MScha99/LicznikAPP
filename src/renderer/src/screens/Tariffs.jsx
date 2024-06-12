@@ -107,9 +107,9 @@ export default function Tariffs() {
 
   return (
     <div class="container mx-auto my-4 px-4">
-      <div className="sm:col-span-3">
+      <div className="sm:col-span-3 mx-auto px-12">
         <label htmlFor="tariffName" className="block text-sm font-medium leading-6 text-gray-900">
-         Nazwa nowoutworzonej taryfy
+         Wprowadź nazwę nowej taryfy
         </label>
         <div className="mt-2">
           <input
@@ -124,7 +124,7 @@ export default function Tariffs() {
         </div>
       </div>
 
-      <div className="mt-4 sm:col-span-3">
+      <div className="mt-4 sm:col-span-3 mx-auto px-12">
         <label
           htmlFor="existingTariffs"
           className="block text-sm font-medium leading-6 text-gray-900"
@@ -146,6 +146,34 @@ export default function Tariffs() {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="mt-4 sm:col-span-3 mx-auto px-12">
+        <button
+            onClick={handleUpdateDatabase}
+            className="mt-4 rounded bg-green-400 px-4 py-2 font-semibold text-white"
+          >
+            Zapisz zmiany
+          </button>
+          <button
+            onClick={async () => {
+              if (name) {
+                if (window.confirm('Are you sure you want to delete this tariff?')) {
+                  await db.tariff.where('name').equalsIgnoreCase(name).delete()
+                  setName('')
+                  setTariffs(
+                    new Array(7).fill(null).map(() => [{ fromHour: '', toHour: '', price: '' }])
+                  )
+                  console.log('Tariff deleted successfully')
+                }
+              } else {
+                alert('Please select a tariff to delete')
+              }
+            }}
+            className="mt-4 rounded bg-red-500 px-4 py-2 font-semibold text-white"
+          >
+            Usuń wybraną taryfę
+          </button>
       </div>
 
       <div className="container mx-auto px-12 py-8">
@@ -209,7 +237,7 @@ export default function Tariffs() {
 
                 <input
                   type="number"
-                  placeholder="koszt kWH "
+                  placeholder="koszt kWh "
                   value={tariff.price}
                   onChange={(e) =>
                     handleTariffChange(dayIndex, tariffIndex, 'price', e.target.value)
@@ -220,39 +248,14 @@ export default function Tariffs() {
             ))}
             <button
               onClick={() => addTariffSlot(dayIndex)}
-              className="mb-4 mt-2 rounded bg-green-500 px-4 py-2 font-semibold text-white"
+              className="mb-4 mt-2 rounded bg-blue-500 px-4 py-2 font-semibold text-white"
             >
               Dodaj kolejny zakres czasowy
             </button>
           </div>
         ))}
 
-        <button
-          onClick={handleUpdateDatabase}
-          className="mt-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white"
-        >
-          Save to DB
-        </button>
-
-        <button
-          onClick={async () => {
-            if (name) {
-              if (window.confirm('Are you sure you want to delete this tariff?')) {
-                await db.tariff.where('name').equalsIgnoreCase(name).delete()
-                setName('')
-                setTariffs(
-                  new Array(7).fill(null).map(() => [{ fromHour: '', toHour: '', price: '' }])
-                )
-                console.log('Tariff deleted successfully')
-              }
-            } else {
-              alert('Please select a tariff to delete')
-            }
-          }}
-          className="mt-4 rounded bg-red-500 px-4 py-2 font-semibold text-white"
-        >
-          Delete Tariff
-        </button>
+      
       </div>
     </div>
   )

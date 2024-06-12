@@ -50,6 +50,13 @@ function Calendar() {
     setWeekState(updatedWeekState)
   }
 
+  const handleColumnToggle = (dayIndex) => {
+    const updatedWeekState = [...weekState]
+    const allSelected = updatedWeekState[dayIndex].every((isActive) => isActive)
+    updatedWeekState[dayIndex] = updatedWeekState[dayIndex].map(() => !allSelected)
+    setWeekState(updatedWeekState)
+  }
+
   const formatHour = (hour) => {
     return hour.toString().padStart(2, '0') + ':00'
   }
@@ -93,16 +100,21 @@ function Calendar() {
     console.log('Database updated successfully:', updatedUsageDataWithoutMinutes)
   }
 
+  const handleDeleteDevice = async () => {
+    if (name) {
+      await db.usage.where('name').equalsIgnoreCase(name).delete()
+      setWeekState(new Array(7).fill(null).map(() => new Array(24).fill(false)))
+      console.log(`Device ${name} deleted successfully`)
+      setName('')
+    }
+  }
+
   return (
-    <div class="container mx-auto my-4 px-4">
-      <div className="sm:col-span-3">
-        <label
-          htmlFor="applianceName"
-          className="block text-sm font-medium leading-6 text-gray-900"
-        >
-          Urządzenie
-        </label>
-        <div className="mt-2">
+    <div className="container mx-auto my-4 px-4 ">
+ 
+
+      <div className="container mx-auto px-12 py-8 ">
+        <div className="mt-2 flex items-center justify-between">
           <select
             value={name}
             onChange={(ev) => setName(ev.target.value)}
@@ -118,27 +130,46 @@ function Calendar() {
               </option>
             ))}
           </select>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-12 py-8">
+        
         <button
           onClick={handleUpdateDatabase}
-          className="mt-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white"
+          className="mt-4 rounded bg-green-400 px-4 py-2 font-semibold text-white"
         >
-          Save to DB
+          Zapisz zmiany w harmonogramie
         </button>
-
-        <div className="grid grid-cols-7 gap-4">
+        <button
+          onClick={handleDeleteDevice}
+          className="ml-4 mt-4 rounded bg-red-500 px-4 py-2 font-semibold text-white"
+        >
+          Usuń wybrane urządzenie
+        </button>
+        </div>
+        <div className="my-5 grid grid-cols-7 gap-4 border-2 border-solid border-indigo-600 px-5 py-2 ">
           {weekState.map((dayState, dayIndex) => (
-            <div key={dayIndex}>
-              <h2>
-                {
-                  ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'][
-                    dayIndex
-                  ]
-                }
-              </h2>
+            <div key={dayIndex} className="text-center ">
+              <div>
+                <input
+                  type="checkbox"
+                  value=""
+                  onClick={() => handleColumnToggle(dayIndex)}
+                  className="ml-2 bg-yellow-500 px-2 py-1 font-semibold text-white"
+                ></input>
+              </div>
+              <div className="py-1 ">
+                <h2>
+                  {
+                    [
+                      'Poniedziałek',
+                      'Wtorek',
+                      'Środa',
+                      'Czwartek',
+                      'Piątek',
+                      'Sobota',
+                      'Niedziela'
+                    ][dayIndex]
+                  }
+                </h2>
+              </div>
               {dayState.map((isActive, hourIndex) => (
                 <button
                   key={hourIndex}

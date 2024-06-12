@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import db from '../services/db.jsx'
 
-export function AddUsageForm({day, timeActive}) {
+export function AddUsageForm({ day, timeActive }) {
   const [name, setName] = useState('')
   // const [day, setDay] = useState('')
   // const [timeActive, setTimeActive] = useState([])
@@ -21,7 +21,7 @@ export function AddUsageForm({day, timeActive}) {
         // timeActive: {'00:00-01:00':true, '01:00-02:00':false},
         timeActive
       })
-      
+
       setStatus(`Usage for appliance ${id} successfully added.`)
       setName('')
       // setDay('')
@@ -32,18 +32,30 @@ export function AddUsageForm({day, timeActive}) {
   }
 
   return (
-    <div class="container mx-auto my-4 px-4 text-xl">
-    
-      <p>{status}</p>
-      
-      {/* day:
+    <div class="container mx-auto my-4 px-4 text-xl ">
+      <div className="container mx-auto px-12 py-8 ">
+        {/* <p>{status}</p> */}
+
+        {/* day:
       <input type="text" value={day} onChange={(ev) => setDay(ev.target.value)} /> */}
-      Nazwa:
-      <input type="text" value={name} onChange={(ev) => setName(ev.target.value)} />
-      kWh:
-      <input type="number" value={power} onChange={(ev) => setPower(Number(ev.target.value))} />
-      <button onClick={AddUsage}>dodaj</button>
-      
+
+        <input
+          type="text"
+          value={name}
+          placeholder="Nazwa urządzenia"
+          className="mx-2 p-2 border-2 border-solid"
+          onChange={(ev) => setName(ev.target.value)}
+        />
+
+        <input
+          type="number"
+          value={power}
+          placeholder="Moc"
+          className="mx-2 p-2 border-2 border-solid"
+          onChange={(ev) => setPower(Number(ev.target.value))}
+        />
+        <button className="mt-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white"onClick={AddUsage}>Dodaj urządzenie</button>
+      </div>
     </div>
   )
 }
